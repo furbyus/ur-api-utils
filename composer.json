@@ -1,0 +1,28 @@
+{
+    "name": "furbyus/ur-api-utils",
+    "type": "library",
+    "description": "API Utils to automate Responses in the ur-API proper version",
+    "keywords": ["api", "electry", "rest", "web service", "electrynet", "response"],
+    "homepage": "https://github.com/furbyus/ur-api-utils",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Francesc Aguilar",
+            "email": "furbyus@gmail.com",
+            "homepage": "https://github.com/furbyus"
+        }
+    ],
+    "require": {
+        "illuminate/http": "^5.8",
+        "symfony/var-dumper": "^4.3",
+        "symfony/http-foundation": "^4.3"
+    },
+    "autoload": {
+        "files": ["src/helpers.php"],
+        "psr-4": {
+            "Electry\\ElectryNet\\Utils\\": "src/"
+        }
+    },
+    "version": "1.0.0"
+
+}
