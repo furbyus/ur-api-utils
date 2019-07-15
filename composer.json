@@ -21,7 +21,7 @@
     ],
     "require": {
         "illuminate/http": "^5.7",
-        "illuminate/contract": "^5.7",
+        "illuminate/contracts": "^5.7",
         "symfony/http-foundation": "^4.3",
         "illuminate/support": "^5.7"
     },
