@@ -11,19 +11,19 @@ register_fn('utils_test', function ($v1, $v2) {
 
 });
 if (!function_exists('response')) {
-   
+
 }
 
 function response($content = '', $status = 200, $headers = [], $info = [])
 {
-    dump($info);
-    $factory = new Electry\ElectryNet\Utils\ResponseFactory;
 
-    if (func_num_args() === 0) {
-        $n = func_num_args  ();
-        dump($n);
-        return $factory;
+    $n = func_num_args();
+
+    if ($n === 0) {
+        print 'n=0';
+        $factory = new UrApi\Utils\ResponseFactory;
+        return $factory->get();
     }
-    
+    $factory = new UrApi\Utils\ResponseFactory;
     return $factory->make($content, $status, $headers, $info);
 }

@@ -1,20 +1,24 @@
 <?php
 
-namespace Electry\ElectryNet\Utils;
+namespace UrApi\Utils;
 
 class ResponseFactory
 {
-
+    public $obj;
     public function __construct()
     {
-        return new Response([], [], 200);
+        $this->obj = new Response(['content'], [0, 1, 2, 3], 200);
     }
     public function make($content, $status, $headers, $info)
     {
-       dump($content);
-        $response = new Response($content, $info, $status);
-        $response->withHeaders($headers);
-        return $response;
+        $this->obj = new Response($content, $info, $status);
+        $this->obj->withHeaders($headers);
+        return $this->get();
+    }
+    public function get()
+    {
+        
+        return $this->obj;
     }
 
 }

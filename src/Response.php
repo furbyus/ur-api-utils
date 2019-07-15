@@ -1,6 +1,6 @@
 <?php
 
-namespace Electry\ElectryNet\Utils;
+namespace UrApi\Utils;
 
 use Illuminate\Http\Response as IlluminateResponse;
 
@@ -18,7 +18,11 @@ class Response extends IlluminateResponse
 
     public function __construct(array $data, $info = null, $code = 200)
     {
+        
+
         parent::__construct();
+        
+     
         if (class_exists('Laravel\Lumen\Application')) {
             $this->constructLaravel($data, $code);
         } else {
@@ -26,26 +30,25 @@ class Response extends IlluminateResponse
             $this->constructOther($info);
         }
 
-        $this->body->append($data);
-        $this->status_code = $code;
+        //$this->body->append($data);
+       //$this->status_code = $code;
     }
     private function constructLaravel($data, $code)
-    {
+    { 
         $this->body = new ResponseBody
             (
-            config('general.api.name'),
-            config('general.api.version'),
-            config('general.app.name'),
-            config('general.app.version')
+            config('urapi.general.api.name'),
+            config('urapi.general.api.version'),
+            config('urapi.general.app.name'),
+            config('urapi.general.app.version')
         );
 
     }
     private function constructOther(array $info)
     {
-        if (!count($info) === 4) {
+        if (!(count($info) === 4) || !array_key_exists(0,$info)) {
             throw new \Exception("Error Building ElectryResponse Instance, 'info' passed to 'new' operator isn't an array of length 4, passed an array of length " . count($info), 1);
         }
-       dd($info);
         $this->body = new ResponseBody($info[0], $info[1], $info[2], $info[3]);
 
     }

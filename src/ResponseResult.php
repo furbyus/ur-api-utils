@@ -1,6 +1,7 @@
 <?php
 
-namespace Electry\ElectryNet\Utils;
+namespace UrApi\Utils;
+
 class ResponseResult
 {
 

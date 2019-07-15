@@ -1,6 +1,6 @@
 <?php
 
-namespace Electry\ElectryNet\Utils;
+namespace UrApi\Utils;
 
 class ResponseBody
 {

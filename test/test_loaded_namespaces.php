@@ -1,6 +1,6 @@
 <?php
 include '../vendor/autoload.php';
-use Electry\ElectryNet\Utils\Response;
+use UrApi\Utils\Response;
 
 
 $content = ['data' => ['data1', 'data2' => [1, 2, 3]]];
@@ -14,3 +14,4 @@ dump($response->send());
 
 $response = response($content, 200, [], $info);
 $response->body->append(['newData' => [1, 2, 3, 4]]);
+dump($response);
