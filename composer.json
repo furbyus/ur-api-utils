@@ -2,7 +2,14 @@
     "name": "furbyus/ur-api-utils",
     "type": "library",
     "description": "API Utils to automate Responses in the UrAPI proper version",
-    "keywords": ["furbyus", "utils", "rest", "web service", "ur-api", "response"],
+    "keywords": [
+        "furbyus",
+        "utils",
+        "rest",
+        "web service",
+        "ur-api",
+        "response"
+    ],
     "homepage": "https://github.com/furbyus/ur-api-utils",
     "license": "MIT",
     "authors": [
@@ -14,12 +21,16 @@
     ],
     "require": {
         "illuminate/http": "^5.8",
-        "symfony/var-dumper": "^4.3",
         "symfony/http-foundation": "^4.3",
         "illuminate/support": "^5.8"
     },
+    "require-dev": {
+        "symfony/var-dumper": "^4.3"
+    },
     "autoload": {
-        "files": ["src/helpers.php"],
+        "files": [
+            "src/helpers.php"
+        ],
         "psr-4": {
             "UrApi\\Utils\\": "src/"
         }
@@ -27,10 +38,10 @@
     "version": "1.0.0",
     "extra": {
         "laravel": {
-            "providers": ["UrApi\\Utils\\LaravelServiceProvider"],
-            "aliases":{}
+            "providers": [
+                "UrApi\\Utils\\LaravelServiceProvider"
+            ],
+            "aliases": {}
         }
     }
-       
-
 }
