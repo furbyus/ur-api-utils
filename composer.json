@@ -37,6 +37,9 @@
             "UrApi\\Utils\\": "src/"
         }
     },
+    "config": {
+        "sort-packages": true
+    },
     "extra": {
         "laravel": {
             "providers": [
