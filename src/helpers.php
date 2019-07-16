@@ -52,7 +52,7 @@ register_fn('a2o', function ($data) {
     return (object) $data;
 });
 /*
-*   Function uresponse helper like Illuminate/Response::response helper, because 'response' function is already declared and it cannot be re-declared
+*   Function uresponse helper like Illuminate/Foundation/helpers.php_>response helper, because 'response' function is already declared and it cannot be re-declared
 */
 if (!function_exists('uresponse')) {
     function uresponse($content = '', $status = 200, $headers = [], $info = [])
