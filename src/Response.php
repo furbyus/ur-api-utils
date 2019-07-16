@@ -39,6 +39,7 @@ class Response extends IlluminateResponse
         }
         $toret[] = 'Passed kernel & app exists';
         $kernel = $GLOBALS['kernel'];
+        $toret[] = $kernel;
         if (!(isset($kernel->app) && isset($kernel->app->instances))) {
             return $return ? [false, $toret] : false;
         }
