@@ -59,10 +59,10 @@ class Response extends IlluminateResponse
     {
         $this->body = new ResponseBody
             (
-            config('urapi.general.api.name'),
-            config('urapi.general.api.version'),
             config('urapi.general.app.name'),
-            config('urapi.general.app.version')
+            config('urapi.general.app.version'),
+            config('urapi.general.api.name'),
+            config('urapi.general.api.version')
         );
 
     }
