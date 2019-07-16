@@ -68,7 +68,7 @@ class Response extends IlluminateResponse
     }
     private function getReflectedProperty(String $propertyName, $targetObject)
     {
-        $reflected = new ReflectionObject($targetObject);
+        $reflected = new \ReflectionObject($targetObject);
         $property = $reflected->getProperty($propertyName);
         $property->setAccessible(true);
         return $property->getValue($targetObject);
