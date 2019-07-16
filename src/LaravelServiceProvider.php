@@ -13,7 +13,7 @@ class LaravelServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/src/config/urapi.php' => config_path('urapi.php'),
+            __DIR__ . '/config/urapi.php' => config_path('urapi.php'),
         ]);
     }
 }
