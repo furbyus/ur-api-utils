@@ -31,24 +31,28 @@ class Response extends IlluminateResponse
         $this->body->append();
         $this->status_code = $code;
     }
-    private function seemsLaravelApplication()
+    public function seemsLaravelApplication($return = false)
     {
+        $toret = [];
         if (!isset($GLOBALS['kernel']) || !isset($GLOBALS['app'])) {
-            return false;
+            return $return ? [false, $toret] : false;
         }
+        $toret[] = 'Passed kernel & app exists';
         $kernel = $GLOBALS['kernel'];
         if (!(isset($kernel->app) && isset($kernel->app->instances))) {
-            return false;
+            return $return ? [false, $toret] : false;
         }
+        $toret[] = 'Passed kernel ->app & ->instances exists';
         $instances = $kernel->app->instances;
         if (!isset($instances['path.base']) || !isset($instances['path.config'])) {
-            return false;
+            return $return ? [false, $toret] : false;
         }
+        $toret[] = 'Passed instances path.base & instances path.config exists';
         $comparePath = $instances['path.base'] . DIRECTORY_SEPARATOR . 'config';
         if ($comparePath !== $instances['path.config']) {
-            return false;
+            return $return ? [false, $toret] : false;
         }
-        return true; //Seems like a Laravel Application
+        return $return ? [true, $toret] : true; //Seems like a Laravel Application
     }
     private function constructLaravel()
     {
