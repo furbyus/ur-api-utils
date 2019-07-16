@@ -39,12 +39,12 @@ class Response extends IlluminateResponse
         }
         $toret[] = 'Passed kernel & app exists';
         $kernel = $GLOBALS['kernel'];
-        $toret[] = $kernel;
-        if (!(isset($kernel->app) && isset($kernel->app->instances))) {
+        $app = $this->getReflectedProperty('app', $kernel);
+        $instances = $this->getReflectedProperty('instances', $app);
+        if (!(isset($app) && isset($instances))) {
             return $return ? [false, $toret] : false;
         }
         $toret[] = 'Passed kernel ->app & ->instances exists';
-        $instances = $kernel->app->instances;
         if (!isset($instances['path.base']) || !isset($instances['path.config'])) {
             return $return ? [false, $toret] : false;
         }
@@ -65,6 +65,13 @@ class Response extends IlluminateResponse
             config('urapi.general.app.version')
         );
 
+    }
+    private function getReflectedProperty(String $propertyName, $targetObject)
+    {
+        $reflected = new ReflectionObject($targetObject);
+        $property = $reflected->getProperty($propertyName);
+        $property->setAccessible(true);
+        return $property;
     }
     private function constructOther(array $info)
     {
