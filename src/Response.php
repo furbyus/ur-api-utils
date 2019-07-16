@@ -24,16 +24,16 @@ class Response extends IlluminateResponse
         
      
         if (class_exists('Laravel\Lumen\Application')) {
-            $this->constructLaravel($data, $code);
+            $this->constructLaravel();
         } else {
             //Workaround, si estamos usando la libreria en otro framework distinto a Laravel o Lumen...
             $this->constructOther($info);
         }
 
-        //$this->body->append($data);
-       //$this->status_code = $code;
+       $this->body->append();
+       $this->status_code = $code;
     }
-    private function constructLaravel($data, $code)
+    private function constructLaravel()
     { 
         $this->body = new ResponseBody
             (

@@ -35,15 +35,36 @@ class ResponseBody
 
         $this->result = new ResponseResult();
     }
-    public function append()
+    public function append(array $data = [], $replace = false)
     {
+        global $otoa, $atoo;
+        if (count($data) === 0) {
+            return false;
+        }
+        if (!isset($this->data) || is_null($this->data)) {
+            $this->data = [];
+        }
         //TODO aquí va el append de los elementos opcionales que puede tener el Response.
+        foreach ($data as $key => $value) {
+            if (!isset($this->data[$key])) {
+                //New Value
+                $this->data[$key] = $value;
+            } else {
+                foreach ($value as $k => $v) {
+                    if (isset($this->data[$key][$k])) {
+                        //Replace ?
+                        $this->data[$key][$k] = $replace ? $v : $this->data[$key][$k];
+                    } else {
+                        //Append
+                        $this->data[$key][$k] = $v;
+                    }
+                }
+            }
+
+        }
     }
     public function getContent($data = null)
     {
-        if (!$data) {
-            $data = [];
-        }
         $content = $this->toArray();
         return $content;
     }
