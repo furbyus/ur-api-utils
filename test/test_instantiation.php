@@ -8,21 +8,21 @@ use UrApi\Utils\Response;
  */
 
 $content = ['data' => ['data1', 'data2' => [1, 2, 3]]];
-$info = ['pn', 'pv', 'in', 'iv'];
+$config = ['pn', 'pv', 'in', 'iv'];//This variable is necessari if you install the package in a no Laravel application
 $overwrite = true;
 
 /*
  *   OOPhp example instantiation:
  */
 
-//$response = new Response($content, $info);
+//$response = new Response($content, $config);
 //$response->header('Test', 'value');
 
 /*
  *   Function helper example instantiation:
  */
 
-$response = uresponse($content, 200, ['Test'=>'value'], $info);
+$response = uresponse($content, 200, ['Test'=>'value'], $config);
 
 
 //Test append some vars

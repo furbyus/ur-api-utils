@@ -18,23 +18,40 @@ class Response extends IlluminateResponse
 
     public function __construct(array $data, $info = null, $code = 200)
     {
-        
 
         parent::__construct();
-        
-     
-        if (class_exists('Laravel\Lumen\Application')) {
+
+        if ($this->seemsLaravelApplication) {
             $this->constructLaravel();
         } else {
             //Workaround, si estamos usando la libreria en otro framework distinto a Laravel o Lumen...
             $this->constructOther($info);
         }
 
-       $this->body->append();
-       $this->status_code = $code;
+        $this->body->append();
+        $this->status_code = $code;
+    }
+    private function seemsLaravelApplication()
+    {
+        if (!isset($GLOBALS['kernel']) || !isset($GLOBALS['app'])) {
+            return false;
+        }
+        $kernel = $GLOBALS['kernel'];
+        if (!(isset($kernel->app) && isset($kernel->app->instances))) {
+            return false;
+        }
+        $instances = $kernel->app->instances;
+        if (!isset($instances['path.base']) || !isset($instances['path.config'])) {
+            return false;
+        }
+        $comparePath = $instances['path.base'] . DIRECTORY_SEPARATOR . 'config';
+        if ($comparePath !== $instances['path.config']) {
+            return false;
+        }
+        return true; //Seems like a Laravel Application
     }
     private function constructLaravel()
-    { 
+    {
         $this->body = new ResponseBody
             (
             config('urapi.general.api.name'),
@@ -46,7 +63,7 @@ class Response extends IlluminateResponse
     }
     private function constructOther(array $info)
     {
-        if (!(count($info) === 4) || !array_key_exists(0,$info)) {
+        if (!(count($info) === 4) || !array_key_exists(0, $info)) {
             throw new \Exception("Error Building ElectryResponse Instance, 'info' passed to 'new' operator isn't an array of length 4, passed an array of length " . count($info), 1);
         }
         $this->body = new ResponseBody($info[0], $info[1], $info[2], $info[3]);
