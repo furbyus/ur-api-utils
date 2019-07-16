@@ -71,7 +71,7 @@ class Response extends IlluminateResponse
         $reflected = new ReflectionObject($targetObject);
         $property = $reflected->getProperty($propertyName);
         $property->setAccessible(true);
-        return $property;
+        return $property->getValue($targetObject);
     }
     private function constructOther(array $info)
     {
