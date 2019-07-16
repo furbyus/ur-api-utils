@@ -2,7 +2,7 @@
     "name": "furbyus/ur-api-utils",
     "type": "library",
     "description": "API Utils to automate Responses in the UrAPI proper version",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "keywords": [
         "furbyus",
         "utils",
@@ -48,7 +48,7 @@
             "aliases": {}
         },
         "branch-alias": {
-            "dev-master": "1.0.5-dev"
+            "dev-master": "1.0.6-dev"
         }
     }
 }
