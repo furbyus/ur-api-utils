@@ -2,6 +2,7 @@
     "name": "furbyus/ur-api-utils",
     "type": "library",
     "description": "API Utils to automate Responses in the UrAPI proper version",
+    "version": "1.0.1",
     "keywords": [
         "furbyus",
         "utils",
@@ -36,13 +37,15 @@
             "UrApi\\Utils\\": "src/"
         }
     },
-    "version": "1.0.1",
     "extra": {
         "laravel": {
             "providers": [
                 "UrApi\\Utils\\LaravelServiceProvider"
             ],
             "aliases": {}
+        },
+        "branch-alias": {
+            "dev-master": "1.0.1-dev"
         }
     }
 }
