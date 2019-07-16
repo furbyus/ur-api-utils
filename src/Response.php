@@ -21,7 +21,7 @@ class Response extends IlluminateResponse
 
         parent::__construct();
 
-        if ($this->seemsLaravelApplication) {
+        if ($this->seemsLaravelApplication()) {
             $this->constructLaravel();
         } else {
             //Workaround, si estamos usando la libreria en otro framework distinto a Laravel o Lumen...
