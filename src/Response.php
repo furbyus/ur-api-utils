@@ -7,29 +7,77 @@ use Illuminate\Http\Response as IlluminateResponse;
 class Response extends IlluminateResponse
 {
     use UtilsTrait;
+    protected  $statusMessages = array(
+        // Informational 1xx
+        100 => 'Continue',
+        101 => 'Switching Protocols',
 
+        // Success 2xx
+        200 => 'OK',
+        201 => 'Created',
+        202 => 'Accepted',
+        203 => 'Non-Authoritative Information',
+        204 => 'No Content',
+        205 => 'Reset Content',
+        206 => 'Partial Content',
+
+        // Redirection 3xx
+        300 => 'Multiple Choices',
+        301 => 'Moved Permanently',
+        302 => 'Found', // 1.1
+        303 => 'See Other',
+        304 => 'Not Modified',
+        305 => 'Use Proxy',
+        // 306 is deprecated but reserved
+        307 => 'Temporary Redirect',
+
+        // Client Error 4xx
+        400 => 'Bad Request',
+        401 => 'Unauthorized',
+        402 => 'Payment Required',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        405 => 'Method Not Allowed',
+        406 => 'Not Acceptable',
+        407 => 'Proxy Authentication Required',
+        408 => 'Request Timeout',
+        409 => 'Conflict',
+        410 => 'Gone',
+        411 => 'Length Required',
+        412 => 'Precondition Failed',
+        413 => 'Request Entity Too Large',
+        414 => 'Request-URI Too Long',
+        415 => 'Unsupported Media Type',
+        416 => 'Requested Range Not Satisfiable',
+        417 => 'Expectation Failed',
+
+        // Server Error 5xx
+        500 => 'Internal Server Error',
+        501 => 'Not Implemented',
+        502 => 'Bad Gateway',
+        503 => 'Service Unavailable',
+        504 => 'Gateway Timeout',
+        505 => 'HTTP Version Not Supported',
+        509 => 'Bandwidth Limit Exceeded',
+    );
     protected $conHeaders = ['Content-Type' => ['value' => 'application/json', 'overWrite' => true]];
 
     protected $noHeaders = ['X-Powered-By'];
-
-    protected $status_code;
-
-    public $body;
 
     public function __construct(array $data, $info = null, $code = 200)
     {
 
         parent::__construct();
-
+        $this->statusCode = $code;
+        $this->statusText = $this->statusMessages[$code] ?: '';
         if ($this->seemsLaravelApplication()) {
             $this->constructLaravel();
         } else {
             //Workaround, si estamos usando la libreria en otro framework distinto a Laravel o Lumen...
             $this->constructOther($info);
         }
+        $this->content->append($data);
 
-        $this->body->append();
-        $this->status_code = $code;
     }
     public function seemsLaravelApplication($return = false)
     {
@@ -57,12 +105,14 @@ class Response extends IlluminateResponse
     }
     private function constructLaravel()
     {
-        $this->body = new ResponseBody
+        $result = new ResponseResult($this->statusCode, $this->statusText);
+        $this->content = new ResponseBody
             (
             config('urapi.general.app.name'),
             config('urapi.general.app.version'),
             config('urapi.general.api.name'),
-            config('urapi.general.api.version')
+            config('urapi.general.api.version'),
+            $result
         );
 
     }
@@ -78,8 +128,14 @@ class Response extends IlluminateResponse
         if (!(count($info) === 4) || !array_key_exists(0, $info)) {
             throw new \Exception("Error Building ElectryResponse Instance, 'info' passed to 'new' operator isn't an array of length 4, passed an array of length " . count($info), 1);
         }
-        $this->body = new ResponseBody($info[0], $info[1], $info[2], $info[3]);
+        $result = new ResponseResult($this->statusCode, $this->statusText);
+        $this->content = new ResponseBody($info[0], $info[1], $info[2], $info[3], $result);
 
+    }
+    public function append(array $data = [], $replace = false)
+    {
+        $this->content->append($data, $replace);
+        return $this->send();
     }
     public function send()
     {
