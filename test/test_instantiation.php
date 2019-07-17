@@ -7,8 +7,8 @@ use UrApi\Utils\Response;
  *
  */
 
-$content = ['data' => ['data1', 'data2' => [1, 2, 3]]];
-$config = ['pn', 'pv', 'in', 'iv'];//This variable is necessari if you install the package in a no Laravel application
+$content = ['data' => ['original', 'original2' => [1, 2, 3]]];
+$config = ['pn', 'pv', 'in', 'iv']; //This variable is necessari if you install the package in a no Laravel application
 $overwrite = true;
 
 /*
@@ -16,22 +16,26 @@ $overwrite = true;
  */
 
 //$response = new Response($content, $config);
+//$reponse->append(['data' => ['overwrited']], true);
 //$response->header('Test', 'value');
 
 /*
  *   Function helper example instantiation:
  */
 
-$response = uresponse($content, 200, ['Test'=>'value'], $config);
+$response = uresponse($content, 301, ['Test' => 'value'], $config)
+    ->append(['data' => ['overwrited']], true)
+    ->header('Test', 'value');
 
+/*
+*   Additional examples, uncomment to test it!
+*/
 
-//Test append some vars
-$response->body->append($content);
 //Test append some other vars
-$response->body->append(['values' => [1, 2, 3, 4]]);
+//$response->append(['values' => [1, 2, 3, 4]]);
 //Test rewrite the vars
-$response->body->append(['values' => [4, 3, 2, 1, 1]], $overwrite);
+//$response->append(['values' => [4, 3, 2, 1, 1]], $overwrite);
 
-
- //Dump the object
+//Dump the object
 dump($response);
+
