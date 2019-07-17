@@ -32,7 +32,6 @@ register_fn('response', function ($content = '', $status = 200, $headers = [], $
     $n = func_num_args();
 
     if ($n === 0) {
-        print 'n=0';
         $factory = new UrApi\Utils\ResponseFactory;
         return $factory->get();
     }
