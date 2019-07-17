@@ -64,6 +64,8 @@ class Response extends IlluminateResponse
 
     protected $noHeaders = ['X-Powered-By'];
 
+    protected $body;
+
     public function __construct(array $data, $info = null, $code = 200)
     {
 
@@ -76,8 +78,8 @@ class Response extends IlluminateResponse
             //Workaround, si estamos usando la libreria en otro framework distinto a Laravel o Lumen...
             $this->constructOther($info);
         }
-        $this->content->append($data);
-
+        $this->body->append($data);
+        $this->setContent($this->getBody());
     }
     public function seemsLaravelApplication($return = false)
     {
@@ -106,7 +108,7 @@ class Response extends IlluminateResponse
     private function constructLaravel()
     {
         $result = new ResponseResult($this->statusCode, $this->statusText);
-        $this->content = new ResponseBody
+        $this->body = new ResponseBody
             (
             config('urapi.general.app.name'),
             config('urapi.general.app.version'),
@@ -129,15 +131,18 @@ class Response extends IlluminateResponse
             throw new \Exception("Error Building ElectryResponse Instance, 'info' passed to 'new' operator isn't an array of length 4, passed an array of length " . count($info), 1);
         }
         $result = new ResponseResult($this->statusCode, $this->statusText);
-        $this->content = new ResponseBody($info[0], $info[1], $info[2], $info[3], $result);
+        $this->body = new ResponseBody($info[0], $info[1], $info[2], $info[3], $result);
 
     }
     public function append(array $data = [], $replace = false)
     {
-        $this->content->append($data, $replace);
-        return $this->send();
+        $this->body->append($data, $replace);
+        return $this->hprepare()->setContent($this->getBody());
     }
-    public function send()
+    private function getBody(){
+        return json_encode($this->body->toArray());
+    }
+    private function hprepare()
     {
         foreach ($this->conHeaders as $hname => $hvalue) {
             $this->header($hname, $hvalue, true);
