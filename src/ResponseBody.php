@@ -6,13 +6,13 @@ class ResponseBody
 {
     use UtilsTrait;
 
-    protected $app_name;
+    protected $appName;
 
-    protected $app_version;
+    protected $appVersion;
 
-    protected $api_name;
+    protected $apiName;
 
-    protected $api_version;
+    protected $apiVersion;
 
     protected $error;
 
@@ -22,18 +22,18 @@ class ResponseBody
 
     protected $debug;
 
-    public function __construct($app_name = 'app_name', $app_version = 'app_version', $api_name = 'api_name', $api_version = 'api_version')
+    public function __construct($appName = 'app_name', $appVersion = 'app_version', $apiName = 'api_name', $apiVersion = 'api_version', ResponseResult $result = null, $error = false)
     {
-        $this->app_name = $app_name;
-        $this->app_version = $app_version;
-        $this->api_name = $api_name;
-        $this->api_version = $api_version;
+        $this->appName = $appName;
+        $this->appVersion = $appVersion;
+        $this->apiName = $apiName;
+        $this->apiVersion = $apiVersion;
 
         // $this->data = []; //Uncomment if data has to be required in response
 
-        $this->error = false;
+        $this->error = $error;
 
-        $this->result = new ResponseResult();
+        $this->result = $result ?: new ResponseResult();
     }
     public function append(array $data = [], $replace = false)
     {
@@ -44,7 +44,7 @@ class ResponseBody
         if (!isset($this->data) || is_null($this->data)) {
             $this->data = [];
         }
-        //TODO aquí va el append de los elementos opcionales que puede tener el Response.
+        //Append de los elementos opcionales que puede tener el Response.
         foreach ($data as $key => $value) {
             if (!isset($this->data[$key])) {
                 //New Value
@@ -62,6 +62,7 @@ class ResponseBody
             }
 
         }
+        return true;
     }
     public function getContent($data = null)
     {

@@ -7,20 +7,20 @@ class ResponseResult
 
     use UtilsTrait;
 
-    protected $status_code;
+    protected $statusCode;
 
-    protected $status_description;
+    protected $statusDescription;
 
-    protected $validation_errors;
+    protected $validationErrors;
 
-    protected $other_errors;
+    protected $otherErrors;
 
-    public function __construct($status_code = 200, $status_description = '', $validation_errors = [], $other_errors = [])
+    public function __construct($statusCode = 200, $statusDescription = '', $validationErrors = [], $otherErrors = [])
     {
-        $this->status_code = $status_code;
-        $this->status_description = $status_description;
-        $this->validation_errors = $validation_errors;
-        $this->other_errors = $other_errors;
+        $this->statusCode = $statusCode;
+        $this->statusDescription = $statusDescription;
+        $this->validationErrors = $validationErrors;
+        $this->otherErrors = $otherErrors;
 
     }
 

@@ -17,7 +17,6 @@ class ResponseFactory
     }
     public function get()
     {
-        
         return $this->obj;
     }
 
