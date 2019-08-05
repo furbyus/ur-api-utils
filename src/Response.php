@@ -145,7 +145,7 @@ class Response extends IlluminateResponse
     private function hprepare()
     {
         foreach ($this->conHeaders as $hname => $hvalue) {
-            $this->header($hname, $hvalue, true);
+            $this->header($hname, $hvalue['value'], $hvalue['overWrite']);
         }
         if (count($this->noHeaders) > 0) {
             foreach ($this->noHeaders as $header) {
