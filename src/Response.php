@@ -80,6 +80,7 @@ class Response extends IlluminateResponse
         }
         $this->body->append($data);
         $this->setContent($this->getBody());
+        $this->hprepare();
     }
     public function seemsLaravelApplication($return = false)
     {
