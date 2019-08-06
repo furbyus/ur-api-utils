@@ -2,7 +2,7 @@
     "name": "furbyus/ur-api-utils",
     "type": "library",
     "description": "API Utils to automate Responses in the UrAPI proper version",
-    "version": "1.0.0-stable",
+    "version": "1.0.0",
     "keywords": [
         "furbyus",
         "utils",
