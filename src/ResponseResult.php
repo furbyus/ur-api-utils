@@ -11,9 +11,9 @@ class ResponseResult
 
     protected $statusDescription;
 
-    protected $validationErrors;
+    public $validationErrors;
 
-    protected $otherErrors;
+    public $otherErrors;
 
     public function __construct($statusCode = 200, $statusDescription = '', $validationErrors = [], $otherErrors = [])
     {

@@ -7,7 +7,7 @@ use Illuminate\Http\Response as IlluminateResponse;
 class Response extends IlluminateResponse
 {
     use UtilsTrait;
-    protected  $statusMessages = array(
+    protected $statusMessages = array(
         // Informational 1xx
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -66,9 +66,11 @@ class Response extends IlluminateResponse
 
     protected $body;
 
-    public function __construct(array $data, $info = null, $code = 200)
+    public function __construct($data = null, $info = null, $code = 200)
     {
-
+        if (!isset($data) || !is_array($data)) {
+            $data = [];
+        }
         parent::__construct();
         $this->statusCode = $code;
         $this->statusText = $this->statusMessages[$code] ?: '';
@@ -135,12 +137,35 @@ class Response extends IlluminateResponse
         $this->body = new ResponseBody($info[0], $info[1], $info[2], $info[3], $result);
 
     }
+    public function addErrors($errors = null, $type = 'validation')
+    {
+
+        if (!isset($errors) || !is_array($errors)) {
+
+            return $this;
+        }
+
+        foreach ($errors as $error) {
+
+            $this->addError($error, $type);
+        }
+
+        return $this;
+    }
+    public function addError($error = null, $type = 'validation')
+    {
+
+        $this->body->resultSet($type . 'Errors', $error);
+        $this->hprepare()->setContent($this->getBody());
+        return $this;
+    }
     public function append(array $data = [], $replace = false)
     {
         $this->body->append($data, $replace);
         return $this->hprepare()->setContent($this->getBody());
     }
-    private function getBody(){
+    private function getBody()
+    {
         return json_encode($this->body->toArray());
     }
     private function hprepare()
