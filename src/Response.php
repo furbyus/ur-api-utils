@@ -137,6 +137,10 @@ class Response extends IlluminateResponse
         $this->body = new ResponseBody($info[0], $info[1], $info[2], $info[3], $result);
 
     }
+    public function withErrors($errors, $type)
+    {
+        return $this->addErrors($errors,$type);
+    }
     public function addErrors($errors = null, $type = 'validation')
     {
 
