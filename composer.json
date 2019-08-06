@@ -47,7 +47,7 @@
                 "UrApi\\Utils\\LaravelServiceProvider"
             ],
             "aliases": {}
-        },
+        }
         
     }
 }
