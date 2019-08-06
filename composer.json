@@ -48,8 +48,6 @@
             ],
             "aliases": {}
         },
-        "branch-alias": {
-            "alpha-master": "1.0.0-alpha"
-        }
+        
     }
 }
