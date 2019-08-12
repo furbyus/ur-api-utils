@@ -24,6 +24,7 @@
         "illuminate/container": "^5.8",
         "illuminate/contracts": "^5.7",
         "illuminate/http": "^5.7",
+        "illuminate/pagination": "^5.8",
         "illuminate/support": "^5.7",
         "symfony/http-foundation": "^4.3"
     },
@@ -49,7 +50,7 @@
             "aliases": {}
         }, 
         "branch-alias": {
-            "dev-master": "1.1.0-dev"
+            "dev-master": "1.1.1-dev"
         }
         
     }
