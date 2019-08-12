@@ -4,7 +4,7 @@ namespace UrApi\Utils;
 
 use Illuminate\Pagination\LengthAwarePaginator as BasePaginator;
 
-class Paginator extends BasePaginator
+class LengthAwarePaginator extends BasePaginator
 {
     /**
      * Get the instance as an array.
