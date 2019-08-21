@@ -257,7 +257,6 @@ class Response extends IlluminateResponse
         }
         $pag = new Paginator($results, $total, $perPage, $curPage, ["path" => $path]);
         $dar = $pag->toArray();
-        $this->dataSet($dar['resultSet']);
         $this->paginationSet($dar['pagination']);
         return $this->getPrepared();
     }
