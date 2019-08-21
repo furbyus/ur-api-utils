@@ -35,6 +35,12 @@ class ResponseBody
 
         $this->result = $result ?: new ResponseResult();
     }
+    public function getData(){
+        return $this->data;
+    }
+    public function resetData(){
+        $this->data = [];
+    }
     public function append($data = [], $replace = false)
     {
         global $otoa, $atoo;
@@ -51,9 +57,11 @@ class ResponseBody
         foreach ($data as $key => $value) {
             if (!isset($this->{$key})) {
                 //New Value
+               
                 $this->{$key} = $value;
             } else {
                 foreach ($value as $k => $v) {
+                   
                     if (isset($this->{$key}[$k])) {
                         //Replace ?
                         $this->{$key}[$k] = $replace ? $v : $this->{$key}[$k];
@@ -68,6 +76,7 @@ class ResponseBody
         return true;
     }
     public function resultSet($prop,$val){
+       
         if(!isset($this->result->{$prop})){
             $this->result->{$prop} = array();
         }
