@@ -68,18 +68,25 @@ class Response extends IlluminateResponse
 
     protected $body;
 
+    protected $resultCollection;
+
     public function __construct($data = null, $info = null, $code = 200)
     {
         if (!isset($data)) {
-            $data = [];
+            $d = [];
         }
 
         if (!is_array($data)) {
             if (is_object($data) && is_a($data, 'Illuminate\Database\Eloquent\Collection')) {
                 //dd($data);
-                $data = $data->all();
+                $this->resultCollection = $data;
+                $d = $data->all();
+
+            } else {
+                $d = (array) $data;
             }
-            $data = (array) $data;
+        } else {
+            $d = $data;
         }
         parent::__construct();
         $this->statusCode = $code;
@@ -90,7 +97,7 @@ class Response extends IlluminateResponse
             //Workaround, si estamos usando la libreria en otro framework distinto a Laravel o Lumen...
             $this->constructOther($info);
         }
-        $this->body->append($data);
+        $this->body->append(['data' => $d]);
         $this->setData($this->getBody());
         $this->hprepare();
         $this->update();
@@ -178,7 +185,8 @@ class Response extends IlluminateResponse
 
         return $this;
     }
-    public function getPrepared(){
+    public function getPrepared()
+    {
         $this->hprepare()->setData($this->getBody());
         return $this;
     }
@@ -198,6 +206,7 @@ class Response extends IlluminateResponse
     }
     public function dataSet($value = '')
     {
+        $this->body->resetData();
         return $this->append(['data' => $value], true);
     }
     public function paginationSet($value = '')
@@ -250,14 +259,15 @@ class Response extends IlluminateResponse
         if ($total === 0) {
             return $this;
         }
-        //$path = ($custPath === '') ? $this->resolveCurrentPath() : $custPath;
         $results = 0;
         if (isset($this->body->data) && is_array($this->body->data)) {
             $results = count($this->body->data);
         }
-        $pag = new Paginator($results, $total, $perPage, $curPage, ["path" => $path]);
+        $pag = new Paginator($this->resultCollection, $total, (int) $perPage, $curPage, ['path' => $path]);
         $dar = $pag->toArray();
+       
         $this->paginationSet($dar['pagination']);
+        $this->dataSet($dar['resultSet']);
         return $this->getPrepared();
     }
 
