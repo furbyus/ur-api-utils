@@ -1,7 +1,6 @@
 <?php
 
 namespace UrApi\Utils;
-
 use Illuminate\Http\JsonResponse as IlluminateResponse;
 
 class Response extends IlluminateResponse
@@ -72,7 +71,12 @@ class Response extends IlluminateResponse
         if (!isset($data)) {
             $data = [];
         }
+        
         if (!is_array($data)) {
+            if(is_object($data) && is_a($data,'Illuminate\Database\Eloquent\Collection')){
+               $data = $data->getDictionary();
+              
+            }
             $data = (array) $data;
         }
         parent::__construct();
@@ -85,7 +89,7 @@ class Response extends IlluminateResponse
             $this->constructOther($info);
         }
         $this->body->append($data);
-        $this->setContent($this->getBody());
+        $this->setData($this->getBody());
         $this->hprepare();
         $this->update();
     }
@@ -169,17 +173,17 @@ class Response extends IlluminateResponse
     {
 
         $this->body->resultSet($type . 'Errors', $error);
-        $this->hprepare()->setContent($this->getBody());
+        $this->hprepare()->setData($this->getBody());
         return $this;
     }
     public function append(array $data = [], $replace = false)
     {
         $this->body->append($data, $replace);
-        return $this->hprepare()->setContent($this->getBody());
+        return $this->hprepare()->setData($this->getBody());
     }
     private function getBody()
     {
-        return json_encode($this->body->toArray());
+        return $this->body->toArray();
     }
     private function hprepare()
     {
