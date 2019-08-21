@@ -2,7 +2,7 @@
 
 namespace UrApi\Utils;
 
-use Illuminate\Http\Response as IlluminateResponse;
+use Illuminate\Http\JsonResponse as IlluminateResponse;
 
 class Response extends IlluminateResponse
 {
@@ -50,6 +50,7 @@ class Response extends IlluminateResponse
         415 => 'Unsupported Media Type',
         416 => 'Requested Range Not Satisfiable',
         417 => 'Expectation Failed',
+        422 => 'Unprocessable Entity',
 
         // Server Error 5xx
         500 => 'Internal Server Error',
@@ -60,7 +61,7 @@ class Response extends IlluminateResponse
         505 => 'HTTP Version Not Supported',
         509 => 'Bandwidth Limit Exceeded',
     );
-    protected $conHeaders = ['Content-Type' => ['value' => 'application/json', 'overWrite' => true]];
+    protected $conHeaders = [];//['Content-Type' => ['value' => 'application/json', 'overWrite' => true]];
 
     protected $noHeaders = ['X-Powered-By'];
 
@@ -86,6 +87,7 @@ class Response extends IlluminateResponse
         $this->body->append($data);
         $this->setContent($this->getBody());
         $this->hprepare();
+        $this->update();
     }
     public function seemsLaravelApplication($return = false)
     {
@@ -140,20 +142,24 @@ class Response extends IlluminateResponse
         $this->body = new ResponseBody($info[0], $info[1], $info[2], $info[3], $result);
 
     }
-    public function withErrors($errors, $type)
+    public function withErrors($errors = null, $type = null)
     {
-        return $this->addErrors($errors, $type);
+        return $this->addErrors($errors,$type);
     }
     public function addErrors($errors = null, $type = 'validation')
     {
 
-        if (!isset($errors) || !is_array($errors)) {
+        if (!isset($errors)) {
+            return $this;
+        }
 
+        $this->error = true;
+        if (!is_iterable($errors)) {
+            $this->addError($errors, $type);
             return $this;
         }
 
         foreach ($errors as $error) {
-
             $this->addError($error, $type);
         }
 
@@ -177,6 +183,9 @@ class Response extends IlluminateResponse
     }
     private function hprepare()
     {
+        if(headers_sent()){
+            return $this;
+        }
         foreach ($this->conHeaders as $hname => $hvalue) {
             $this->header($hname, $hvalue['value'], $hvalue['overWrite']);
         }
@@ -206,7 +215,7 @@ class Response extends IlluminateResponse
         if (!key_exists($hname, $this->conHeaders)) {
 
         }
-        $this->conHeaders[$hname] = ['value' => $hval, 'overWrite' => $replace];
+        $this->conHeaders[$hname] = ['value' => $hvalue, 'overWrite' => $replace];
         return true;
     }
 }
