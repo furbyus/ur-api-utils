@@ -64,8 +64,9 @@ class ResponseBody
         }
         return true;
     }
-    public function resultSet($prop,$val){
-        if(!isset($this->result->{$prop})){
+    public function resultSet($prop, $val)
+    {
+        if (!isset($this->result->{$prop})) {
             $this->result->{$prop} = array();
         }
         $this->result->{$prop}[] = $val;
