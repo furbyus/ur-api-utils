@@ -68,8 +68,11 @@ class Response extends IlluminateResponse
 
     public function __construct($data = null, $info = null, $code = 200)
     {
-        if (!isset($data) || !is_array($data)) {
+        if (!isset($data)) {
             $data = [];
+        }
+        if (!is_array($data)) {
+            $data = (array) $data;
         }
         parent::__construct();
         $this->statusCode = $code;
@@ -139,7 +142,7 @@ class Response extends IlluminateResponse
     }
     public function withErrors($errors, $type)
     {
-        return $this->addErrors($errors,$type);
+        return $this->addErrors($errors, $type);
     }
     public function addErrors($errors = null, $type = 'validation')
     {
