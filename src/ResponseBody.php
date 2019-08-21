@@ -49,17 +49,17 @@ class ResponseBody
         }
         //Append de los elementos opcionales que puede tener el Response.
         foreach ($data as $key => $value) {
-            if (!isset($this->data[$key])) {
+            if (!isset($this->{$key})) {
                 //New Value
-                $this->data[$key] = $value;
+                $this->{$key} = $value;
             } else {
                 foreach ($value as $k => $v) {
-                    if (isset($this->data[$key][$k])) {
+                    if (isset($this->{$key}[$k])) {
                         //Replace ?
-                        $this->data[$key][$k] = $replace ? $v : $this->data[$key][$k];
+                        $this->{$key}[$k] = $replace ? $v : $this->{$key}[$k];
                     } else {
                         //Append
-                        $this->data[$key][$k] = $v;
+                        $this->{$key}[$k] = $v;
                     }
                 }
             }

@@ -1,7 +1,10 @@
 <?php
 
 namespace UrApi\Utils;
+
 use Illuminate\Http\JsonResponse as IlluminateResponse;
+use UrApi\Utils\LengthAwarePaginator as Paginator;
+
 class Response extends IlluminateResponse
 {
     use UtilsTrait;
@@ -59,7 +62,7 @@ class Response extends IlluminateResponse
         505 => 'HTTP Version Not Supported',
         509 => 'Bandwidth Limit Exceeded',
     );
-    protected $conHeaders = [];//['Content-Type' => ['value' => 'application/json', 'overWrite' => true]];
+    protected $conHeaders = []; //['Content-Type' => ['value' => 'application/json', 'overWrite' => true]];
 
     protected $noHeaders = ['X-Powered-By'];
 
@@ -70,11 +73,11 @@ class Response extends IlluminateResponse
         if (!isset($data)) {
             $data = [];
         }
-        
+
         if (!is_array($data)) {
-            if(is_object($data) && is_a($data,'Illuminate\Database\Eloquent\Collection')){
+            if (is_object($data) && is_a($data, 'Illuminate\Database\Eloquent\Collection')) {
                 //dd($data);
-               $data = $data->all();
+                $data = $data->all();
             }
             $data = (array) $data;
         }
@@ -129,6 +132,13 @@ class Response extends IlluminateResponse
         );
 
     }
+    private function resultSet(String $property = '', $data)
+    {
+        if ($property = '') {
+            return false;
+        }
+        return $this->body->resultSet($property, $data);
+    }
     private function getReflectedProperty(String $propertyName, $targetObject)
     {
         $reflected = new \ReflectionObject($targetObject);
@@ -147,7 +157,7 @@ class Response extends IlluminateResponse
     }
     public function withErrors($errors = null, $type = null)
     {
-        return $this->addErrors($errors,$type);
+        return $this->addErrors($errors, $type);
     }
     public function addErrors($errors = null, $type = 'validation')
     {
@@ -168,17 +178,31 @@ class Response extends IlluminateResponse
 
         return $this;
     }
-    public function addError($error = null, $type = 'validation')
-    {
-
-        $this->body->resultSet($type . 'Errors', $error);
+    public function getPrepared(){
         $this->hprepare()->setData($this->getBody());
         return $this;
+    }
+    public function addError($error = null, $type = 'validation')
+    {
+        $this->body->resultSet($type . 'Errors', $error);
+        return $this->getPrepared();
     }
     public function append(array $data = [], $replace = false)
     {
         $this->body->append($data, $replace);
-        return $this->hprepare()->setData($this->getBody());
+        return $this->getPrepared();
+    }
+    public function appendData($value = '', $replace = false)
+    {
+        return $this->append(['data' => $value], $replace);
+    }
+    public function dataSet($value = '')
+    {
+        return $this->append(['data' => $value], true);
+    }
+    public function paginationSet($value = '')
+    {
+        return $this->append(['pagination' => $value], true);
     }
     private function getBody()
     {
@@ -186,7 +210,7 @@ class Response extends IlluminateResponse
     }
     private function hprepare()
     {
-        if(headers_sent()){
+        if (headers_sent()) {
             return $this;
         }
         foreach ($this->conHeaders as $hname => $hvalue) {
@@ -221,6 +245,23 @@ class Response extends IlluminateResponse
         $this->conHeaders[$hname] = ['value' => $hvalue, 'overWrite' => $replace];
         return true;
     }
+    public function paginate($path, $total = 0, $perPage = 20, $curPage = 1)
+    {
+        if ($total === 0) {
+            return $this;
+        }
+        //$path = ($custPath === '') ? $this->resolveCurrentPath() : $custPath;
+        $results = 0;
+        if (isset($this->body->data) && is_array($this->body->data)) {
+            $results = count($this->body->data);
+        }
+        $pag = new Paginator($results, $total, $perPage, $curPage, ["path" => $path]);
+        $dar = $pag->toArray();
+        $this->dataSet($dar['resultSet']);
+        $this->paginationSet($dar['pagination']);
+        return $this->getPrepared();
+    }
+
 }
 
 trait UtilsTrait
