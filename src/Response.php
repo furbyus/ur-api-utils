@@ -2,7 +2,6 @@
 
 namespace UrApi\Utils;
 use Illuminate\Http\JsonResponse as IlluminateResponse;
-
 class Response extends IlluminateResponse
 {
     use UtilsTrait;
@@ -74,8 +73,8 @@ class Response extends IlluminateResponse
         
         if (!is_array($data)) {
             if(is_object($data) && is_a($data,'Illuminate\Database\Eloquent\Collection')){
-               $data = $data->getDictionary();
-              
+                //dd($data);
+               $data = $data->all();
             }
             $data = (array) $data;
         }
