@@ -35,9 +35,12 @@ class ResponseBody
 
         $this->result = $result ?: new ResponseResult();
     }
-    public function append(array $data = [], $replace = false)
+    public function append($data = [], $replace = false)
     {
         global $otoa, $atoo;
+        if(!is_array($data)){
+            $data = (array) $data;
+        }
         if (count($data) === 0) {
             return false;
         }
@@ -64,9 +67,8 @@ class ResponseBody
         }
         return true;
     }
-    public function resultSet($prop, $val)
-    {
-        if (!isset($this->result->{$prop})) {
+    public function resultSet($prop,$val){
+        if(!isset($this->result->{$prop})){
             $this->result->{$prop} = array();
         }
         $this->result->{$prop}[] = $val;
