@@ -41,6 +41,9 @@ class ResponseBody
     public function resetData(){
         $this->data = [];
     }
+    public function countData(){
+       return count($this->data);
+    }
     public function append($data = [], $replace = false)
     {
         global $otoa, $atoo;

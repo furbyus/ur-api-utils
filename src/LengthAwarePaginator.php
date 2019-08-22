@@ -15,9 +15,12 @@ class LengthAwarePaginator extends BasePaginator
     {
 
         $values = [];
-        for ($iterator = $this->slice->getIterator(); $iterator->valid(); $iterator->next()) {
-            $values[] = $iterator->current()->toArray();
+        if($this->slice){
+            for ($iterator = $this->slice->getIterator(); $iterator->valid(); $iterator->next()) {
+                $values[] = $iterator->current()->toArray();
+            }
         }
+       
         return [
             'pagination' => [
                 'currentPage' => $this->currentPage(),
@@ -38,8 +41,12 @@ class LengthAwarePaginator extends BasePaginator
     }
     public function __construct($items, $total, $perPage, $curPage, $options)
     {
-
-        $this->slice = $items->slice($curPage * $perPage - $perPage, $perPage);
+        if($items){
+            $this->slice = $items->slice($curPage * $perPage - $perPage, $perPage);
+        }else{
+            $this->slice = $items;
+        }
+       
         parent::__construct($items, $total, $perPage, $curPage, $options);
     }
     public function firstPageItem()

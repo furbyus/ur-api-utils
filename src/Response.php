@@ -78,7 +78,6 @@ class Response extends IlluminateResponse
 
         if (!is_array($data)) {
             if (is_object($data) && is_a($data, 'Illuminate\Database\Eloquent\Collection')) {
-                //dd($data);
                 $this->resultCollection = $data;
                 $d = $data->all();
 
@@ -256,7 +255,7 @@ class Response extends IlluminateResponse
     }
     public function paginate($path, $total = 0, $perPage = 20, $curPage = 1)
     {
-        if ($total === 0) {
+        if ($total === 0 || !($this->body->countData() > 0)) {
             return $this;
         }
         $results = 0;
@@ -265,7 +264,6 @@ class Response extends IlluminateResponse
         }
         $pag = new Paginator($this->resultCollection, $total, (int) $perPage, $curPage, ['path' => $path]);
         $dar = $pag->toArray();
-       
         $this->paginationSet($dar['pagination']);
         $this->dataSet($dar['resultSet']);
         return $this->getPrepared();
