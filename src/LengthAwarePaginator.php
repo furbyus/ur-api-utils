@@ -34,7 +34,7 @@ class LengthAwarePaginator extends BasePaginator
                 'prevPageUrl' => $this->previousPageUrl(),
                 'toItem' => $this->lastPageItem(),
                 'totalItems' => $this->total(),
-                'toalPages' => $this->lastPage(),
+                'totalPages' => $this->lastPage(),
             ],
             'resultSet' => $values,
         ];
