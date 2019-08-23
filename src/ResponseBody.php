@@ -14,7 +14,7 @@ class ResponseBody
 
     protected $apiVersion;
 
-    protected $error;
+    public $error;
 
     protected $result;
 

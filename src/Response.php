@@ -80,7 +80,6 @@ class Response extends IlluminateResponse
             if (is_object($data) && is_a($data, 'Illuminate\Database\Eloquent\Collection')) {
                 $this->resultCollection = $data;
                 $d = $data->all();
-
             } else {
                 $d = (array) $data;
             }
@@ -152,6 +151,10 @@ class Response extends IlluminateResponse
         $property->setAccessible(true);
         return $property->getValue($targetObject);
     }
+    private function setError($error=true){
+        $this->body->error = true;
+        return $this->getPrepared();
+    }
     private function constructOther(array $info)
     {
         if (!(count($info) === 4) || !array_key_exists(0, $info)) {
@@ -162,7 +165,8 @@ class Response extends IlluminateResponse
 
     }
     public function withErrors($errors = null, $type = null)
-    {
+    {   
+
         return $this->addErrors($errors, $type);
     }
     public function addErrors($errors = null, $type = 'validation')
@@ -172,7 +176,7 @@ class Response extends IlluminateResponse
             return $this;
         }
 
-        $this->error = true;
+        $this->setError();
         if (!is_iterable($errors)) {
             $this->addError($errors, $type);
             return $this;
