@@ -35,19 +35,26 @@ class ResponseBody
 
         $this->result = $result ?: new ResponseResult();
     }
-    public function getData(){
+    public function getData()
+    {
         return $this->data;
     }
-    public function resetData(){
+    public function resetData()
+    {
         $this->data = [];
     }
-    public function countData(){
-       return count($this->data);
+    public function countData()
+    {
+        return count($this->data);
+    }
+    public function error($error = true)
+    {
+        $this->error = $error;
     }
     public function append($data = [], $replace = false)
     {
         global $otoa, $atoo;
-        if(!is_array($data)){
+        if (!is_array($data)) {
             $data = (array) $data;
         }
         if (count($data) === 0) {
@@ -60,11 +67,11 @@ class ResponseBody
         foreach ($data as $key => $value) {
             if (!isset($this->{$key})) {
                 //New Value
-               
+
                 $this->{$key} = $value;
             } else {
                 foreach ($value as $k => $v) {
-                   
+
                     if (isset($this->{$key}[$k])) {
                         //Replace ?
                         $this->{$key}[$k] = $replace ? $v : $this->{$key}[$k];
@@ -78,12 +85,29 @@ class ResponseBody
         }
         return true;
     }
-    public function resultSet($prop,$val){
-       
-        if(!isset($this->result->{$prop})){
+    public function resultSet($prop, $val)
+    {
+        if (!isset($this->result->{$prop})) {
             $this->result->{$prop} = array();
         }
         $this->result->{$prop}[] = $val;
+    }
+    public function errorSet($prop, $val)
+    {
+        if (!isset($this->result->{$prop})) {
+            $this->result->{$prop} = array();
+        }
+        if (!is_iterable($val)) {
+            $this->result->{$prop}[] = $val;
+            return true;
+        }
+        foreach ($val as $key => $value) {
+            if(is_int($key)){
+                $this->result->{$prop}[] = $value;
+                continue;
+            }
+            $this->result->{$prop}[$key] = $value;
+        }
     }
     public function getContent($data = null)
     {

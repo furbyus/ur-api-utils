@@ -172,15 +172,15 @@ class Response extends IlluminateResponse
             return $this;
         }
 
-        $this->error = true;
         if (!is_iterable($errors)) {
             $this->addError($errors, $type);
             return $this;
         }
-
+        $this->addError($errors, $type);
+/*
         foreach ($errors as $error) {
             $this->addError($error, $type);
-        }
+        }*/
 
         return $this;
     }
@@ -191,7 +191,8 @@ class Response extends IlluminateResponse
     }
     public function addError($error = null, $type = 'validation')
     {
-        $this->body->resultSet($type . 'Errors', $error);
+        $this->body->errorSet($type . 'Errors', $error);
+        $this->body->error();
         return $this->getPrepared();
     }
     public function append(array $data = [], $replace = false)
