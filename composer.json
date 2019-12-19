@@ -2,7 +2,6 @@
     "name": "furbyus/ur-api-utils",
     "type": "library",
     "description": "API Utils to automate Responses in the UrAPI proper version",
-    "version": "1.1.1-dev",
     "keywords": [
         "furbyus",
         "utils",
@@ -21,12 +20,7 @@
         }
     ],
     "require": {
-        "illuminate/container": "^5.8",
-        "illuminate/contracts": "^5.7",
-        "illuminate/http": "^5.7",
-        "illuminate/pagination": "^5.8",
-        "illuminate/support": "^5.7",
-        "symfony/http-foundation": "^4.3"
+        "illuminate/pagination": "^6.8"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.3"
@@ -50,7 +44,7 @@
             "aliases": {}
         }, 
         "branch-alias": {
-            "dev-master": "1.1.1.13-dev"
+            "dev-master": "1.1.2.0-dev"
         }
         
     }
