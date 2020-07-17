@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "illuminate/pagination": "5.5 - 6.*"
+        "illuminate/pagination": "5.5 - 6"
     },
     "require-dev": {
         "symfony/var-dumper": "^5.0"
